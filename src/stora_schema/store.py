@@ -32,7 +32,35 @@ def load_history(path: str | Path) -> History:
         (str(item["staff_id"]), parse_iso_date(item["date"]))
         for item in payload.get("absences") or []
     }
-    return History(staff=staff, shifts=shifts, absences=absences)
+    for staff_id, days in (payload.get("availability") or {}).items():
+        for day, status in days.items():
+            if status == "unavailable":
+                absences.add((str(staff_id), parse_iso_date(day)))
+    available_only: dict[str, set] = {}
+    for staff_id in list(payload.get("part_time_staff_ids") or []) + list(
+        payload.get("tick_only_staff_ids") or []
+    ):
+        days = (payload.get("availability") or {}).get(str(staff_id), {})
+        available_only[str(staff_id)] = {
+            parse_iso_date(day) for day, status in days.items() if status == "available"
+        }
+    extra_roles = [
+        (str(item["staff_id"]), item["role"], item["start"], item["end"])
+        for item in payload.get("extra_roles") or []
+    ]
+    return History(
+        staff=staff,
+        shifts=shifts,
+        absences=absences,
+        available_only=available_only,
+        admin_primary_ids={str(item) for item in payload.get("admin_primary_staff_ids") or []},
+        prefer_five_day_ids={str(item) for item in payload.get("prefer_five_day_staff_ids") or []},
+        extra_roles=extra_roles,
+        exclude_foh_ids={str(item) for item in payload.get("exclude_foh_staff_ids") or []},
+        extra_foh_ids={str(item) for item in payload.get("extra_foh_staff_ids") or []},
+        max_shifts={str(staff_id): int(limit) for staff_id, limit in (payload.get("max_shifts") or {}).items()},
+        inactive_ids={str(item) for item in payload.get("inactive_staff_ids") or []},
+    )
 
 
 def _role_fields(item: dict) -> tuple[str, str, str]:

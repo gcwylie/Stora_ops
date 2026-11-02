@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Stora schema</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0a1138;
+      --navy-soft: #1c2445;
+      --ink-quiet: #474d66;
+      --ink-silent: #64687d;
+      --brand: #0c30e4;
+      --brand-loud: #234efb;
+      --lavender: #cac2ff;
+      --lavender-quiet: #eae7fd;
+      --page: #f9f5f6;
+      --white: #ffffff;
+      --line: #cdc9cf;
+      --butter: #ffcc7a;
+      --happy: #ffa929;
+      --orange-wash: #feddbb;
+      --rose: #f69dea;
+      --danger: #dc3131;
+      --radius-card: 24px;
+      --radius-pill: 9999px;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--page);
+      color: var(--navy);
+      font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 16px 28px;
+      background: var(--white);
+      border-bottom: 1px solid var(--line);
+    }
+    .app-nav { flex-shrink: 0; }
+    .wordmark {
+      font-weight: 700;
+      font-size: 22px;
+      letter-spacing: -0.03em;
+      color: var(--navy);
+    }
+    .wordmark span { color: var(--brand); }
+    .spacer { flex: 1; }
+    .week-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+    }
+    .week-nav strong { min-width: 168px; text-align: center; }
+    .board-toggle {
+      display: flex;
+      align-items: stretch;
+      border: 1px solid var(--navy);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .board-toggle .pill {
+      border-radius: 0;
+      background: var(--white);
+      padding: 8px 18px;
+    }
+    .board-toggle .pill.active {
+      background: var(--navy);
+      color: var(--white);
+    }
+    button, select {
+      font-family: inherit;
+    }
+    .btn {
+      border: 0;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 10px 18px;
+      border-radius: var(--radius-pill);
+    }
+    .btn-navy {
+      background: var(--navy);
+      color: var(--white);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--navy);
+      border: 1px solid var(--navy);
+    }
+    .btn-icon {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border-radius: 50%;
+      border: 1px solid var(--navy);
+      background: var(--white);
+      color: var(--navy);
+      font-size: 18px;
+      line-height: 1;
+    }
+    main { padding: 24px 28px 64px; }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .pills { display: flex; gap: 8px; }
+    .pill {
+      border: 0;
+      background: var(--white);
+      color: var(--navy);
+      border-radius: var(--radius-pill);
+      padding: 8px 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .pill.active {
+      background: var(--navy);
+      color: var(--white);
+    }
+    .coverage {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      margin: 0 0 16px;
+      padding-bottom: 4px;
+    }
+    .coverage-day {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 10px 12px;
+      min-width: 132px;
+      flex: 1;
+    }
+    .coverage-day b { display: block; font-size: 13px; margin-bottom: 6px; }
+    .coverage-day span { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--ink-quiet); font-weight: 500; }
+    .coverage-day span[data-ok="1"] { color: #1f7a4d; }
+    .coverage-day span[data-ok="0"] { color: var(--danger); font-weight: 700; }
+    .stats {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .stat {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 14px 18px;
+      min-width: 140px;
+    }
+    .stat b { display: block; font-size: 22px; letter-spacing: -0.03em; }
+    .stat span { color: var(--ink-quiet); font-size: 13px; }
+    .hint {
+      background: var(--lavender-quiet);
+      color: var(--navy);
+      border-radius: 16px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    .board {
+      background: var(--white);
+      border-radius: var(--radius-card);
+      overflow: auto;
+      max-height: calc(100vh - 220px);
+    }
+    table {
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 1180px;
+      width: 100%;
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid #eee8eb;
+      padding: 6px;
+      vertical-align: middle;
+    }
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: var(--white);
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+      padding: 12px 8px;
+      color: var(--ink-quiet);
+    }
+    .name {
+      position: sticky;
+      left: 0;
+      z-index: 4;
+      background: var(--white);
+      font-weight: 500;
+      min-width: 220px;
+      padding-left: 16px;
+    }
+    .name small {
+      display: block;
+      color: var(--ink-silent);
+      font-size: 11px;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+    .name small.site-tag { color: var(--brand); }
+    .away-chip {
+      margin: 0 2px;
+      padding: 4px 8px;
+      border-radius: 8px;
+      background: var(--lavender-quiet);
+      color: var(--brand);
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+    .cell-shift[data-clash="1"] .away-chip {
+      background: #fde8e8;
+      color: var(--danger);
+    }
+    .rate { width: 88px; }
+    .rate-input {
+      width: 100%;
+      text-align: right;
+      font: inherit;
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px 8px;
+      color: var(--navy);
+      background: var(--page);
+    }
+    .rate-input:focus {
+      outline: 2px solid var(--brand-loud);
+      outline-offset: 1px;
+      background: var(--white);
+    }
+    thead .name { z-index: 6; }
+    .group-row td {
+      background: var(--lavender-quiet);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--brand);
+      padding: 10px 16px;
+      position: sticky;
+      left: 0;
+    }
+    .cell-shift { display: flex; flex-direction: column; gap: 4px; }
+    .cell-times {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0 6px 2px;
+    }
+    .cell-times span { color: var(--ink-silent); font-size: 11px; }
+    .cell-times em {
+      margin-left: auto;
+      font-style: normal;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-silent);
+      font-variant-numeric: tabular-nums;
+    }
+    .cell-times[data-custom="1"] em,
+    .cell-times[data-custom="1"] .time-input { color: var(--brand); }
+    .time-input {
+      width: 3.6rem;
+      min-width: 0;
+      border: 0;
+      background: transparent;
+      font: inherit;
+      font-size: 11px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--navy);
+      padding: 0;
+    }
+    .time-input:focus {
+      outline: 2px solid var(--brand-loud);
+      outline-offset: 1px;
+      border-radius: 6px;
+      background: var(--white);
+    }
+    select.shift {
+      width: 100%;
+      min-width: 148px;
+      appearance: none;
+      border: 0;
+      border-radius: 12px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--navy);
+      background-image: linear-gradient(45deg, transparent 50%, var(--navy) 50%), linear-gradient(135deg, var(--navy) 50%, transparent 50%);
+      background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%;
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+      cursor: pointer;
+    }
+    select.shift.off {
+      background-color: var(--page);
+      color: var(--ink-silent);
+      font-weight: 500;
+    }
+    select.shift.bakery { background-color: var(--butter); }
+    select.shift.kitchen { background-color: var(--orange-wash); }
+    select.shift.foh { background-color: var(--lavender); }
+    select.shift.admin { background-color: var(--lavender-quiet); }
+    select.shift.erik { background-color: #ffd6f6; }
+    select.shift:focus {
+      outline: 2px solid var(--brand-loud);
+      outline-offset: 1px;
+    }
+    .pass-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-height: 42px;
+    }
+    .pass-card {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    select.shift.pass-add {
+      min-width: 0;
+      padding: 6px 10px;
+      font-weight: 500;
+    }
+    .board.pass-view table { min-width: 1080px; }
+    .board.pass-view .name { min-width: 168px; }
+    .btn-brand {
+      background: var(--brand);
+      color: var(--white);
+    }
+    .send-panel {
+      display: none;
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 40;
+      width: min(420px, calc(100vw - 40px));
+      background: var(--navy);
+      color: var(--white);
+      border-radius: 24px;
+      padding: 20px 22px;
+      box-shadow: 0 16px 40px rgba(10, 17, 56, 0.28);
+    }
+    .send-panel.open { display: block; }
+    .send-panel h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      letter-spacing: -0.03em;
+    }
+    .send-panel p {
+      margin: 0 0 12px;
+      color: #d7d9e6;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .send-panel a {
+      color: var(--lavender);
+      font-weight: 700;
+    }
+    .bookmark {
+      display: inline-flex;
+      margin: 4px 0 12px;
+      background: var(--brand-loud);
+      color: var(--white) !important;
+      text-decoration: none;
+      border-radius: var(--radius-pill);
+      padding: 10px 16px;
+      font-weight: 700;
+    }
+    .send-close {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      border: 0;
+      background: transparent;
+      color: #d7d9e6;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .send-panel code {
+      font-size: 12px;
+      background: #1c2445;
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+    .app-nav { display: flex; gap: 6px; }
+    #salesTools { display: none; align-items: center; gap: 12px; }
+    #salesMain { display: none; }
+    .target-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink-quiet);
+    }
+    .target-wrap input[type="range"] { width: 140px; accent-color: var(--brand); }
+    .target-wrap input[type="number"] { width: 72px; border: 1px solid var(--line); border-radius: 10px; padding: 6px 8px; font: inherit; }
+    .target-wrap b { color: var(--navy); min-width: 3ch; }
+    .sales-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 16px; align-items: start; }
+    @media (max-width: 980px) { .sales-grid { grid-template-columns: 1fr; } }
+    .sales-card {
+      background: var(--white);
+      border-radius: var(--radius-card);
+      padding: 18px 20px 8px;
+      overflow: auto;
+    }
+    .sales-card h2 {
+      margin: 0 0 12px;
+      font-size: 16px;
+      letter-spacing: -0.03em;
+    }
+    .sales-card table { min-width: 0; width: 100%; }
+    .sales-card th, .sales-card td {
+      font-size: 13px;
+      text-align: left;
+      padding: 8px 6px;
+    }
+    .sales-card td.num, .sales-card th.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .sales-card tr.proj td { color: var(--ink-quiet); }
+    .stat b[data-tone="up"] { color: #12833b; }
+    .stat b[data-tone="down"] { color: var(--danger); }
+    .sales-bar-row {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink-quiet);
+    }
+    .sales-bar-track { position: relative; height: 18px; }
+    .sales-bar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 8px;
+      border-radius: 99px;
+    }
+    .sales-bar.y23 { background: #e6e2e8; top: 0; height: 5px; }
+    .sales-bar.y24 { background: #cdc9cf; top: 6px; height: 5px; }
+    .sales-bar.last { background: #9a96a8; top: 12px; height: 5px; }
+    .sales-bar.now { background: var(--brand); top: 18px; height: 6px; }
+    .sales-bar.now.proj { background: var(--lavender); }
+    .sales-bar-track { height: 26px; }
+    .sales-legend { color: var(--ink-silent); font-size: 12px; font-weight: 500; margin: 8px 0 12px; }
+    .sales-days { max-height: 420px; }
+    .sales-cmp-date {
+      display: block;
+      margin-top: 2px;
+      color: var(--ink-silent);
+      font-size: 11px;
+      font-weight: 500;
+    }
+    #salesDaysTable tr.closed td.num { color: var(--ink-silent); }
+    .sales-wage { margin-top: 16px; }
+    .wage-input {
+      width: 8.8rem;
+      max-width: 100%;
+      text-align: right;
+      font: inherit;
+      font-variant-numeric: tabular-nums;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 6px 8px;
+      color: var(--navy);
+      background: var(--page);
+    }
+    .wage-input:focus {
+      outline: 2px solid var(--brand-loud);
+      outline-offset: 1px;
+      background: var(--white);
+    }
+    .wage-empty { color: var(--ink-silent); }
+    .labour-sheet { margin: 0 0 16px; }
+    .labour-rates {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 18px;
+      margin: 0 0 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-quiet);
+    }
+    .labour-rates input {
+      width: 72px;
+      margin-left: 6px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 6px 8px;
+      font: inherit;
+      font-variant-numeric: tabular-nums;
+    }
+    .labour-sheet table { min-width: 0; width: 100%; }
+    .labour-sheet th, .labour-sheet td { font-size: 12px; padding: 7px 5px; }
+    .labour-sheet th small {
+      display: block;
+      font-weight: 500;
+      color: var(--ink-silent);
+      font-size: 10px;
+    }
+    .labour-sheet td:first-child, .labour-sheet th:first-child {
+      position: sticky;
+      left: 0;
+      background: var(--white);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .labour-sheet td.num, .labour-sheet th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .labour-sheet tr.labour-total td { font-weight: 700; }
+    .labour-sheet td[data-ok="1"] { color: #1f7a4d; }
+    .labour-sheet td[data-ok="0"] { color: var(--danger); font-weight: 700; }
+    .labour-sheet tr.muted td { color: var(--ink-silent); font-weight: 500; }
+    .labour-sheet tr.labour-total + tr.muted td { border-top: 2px solid var(--line); padding-top: 12px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wordmark">Stora <span>schema</span></div>
+    <div class="app-nav pills">
+      <button class="pill active" data-view="schema">Schema</button>
+      <button class="pill" data-view="sales">Försäljning</button>
+    </div>
+    <div id="schemaTools" style="display:contents">
+      <div class="week-nav">
+        <button class="btn-icon" id="prev" aria-label="Previous week">‹</button>
+        <strong id="weekLabel">Week 45</strong>
+        <button class="btn-icon" id="next" aria-label="Next week">›</button>
+      </div>
+      <div class="board-toggle" id="boardView">
+        <button class="pill active" data-board="personal">Personal</button>
+        <button class="pill" data-board="pass">Pass</button>
+      </div>
+      <div class="spacer"></div>
+      <button class="btn btn-ghost" id="exportJson">Export week</button>
+      <button class="btn btn-brand" id="sendCaspeco">Send to Caspeco</button>
+      <button class="btn btn-navy" id="resetWeek">Reset week 47</button>
+    </div>
+    <div id="salesTools">
+      <div class="spacer"></div>
+      <label class="target-wrap">Year target <input id="salesTarget" type="range" min="0" max="25" step="1" value="10" /> <b id="salesTargetLabel">10%</b></label>
+    </div>
+  </header>
+  <main id="schemaMain">
+    <div class="toolbar">
+      <div class="pills">
+        <button class="pill active" data-site="ostermalm">Östermalm</button>
+        <button class="pill" data-site="vasastan">St Eriksgatan</button>
+      </div>
+    </div>
+    <div class="coverage" id="fohCoverage"></div>
+    <div class="stats">
+      <div class="stat"><b id="shiftCount">0</b><span>Shifts placed</span></div>
+      <div class="stat"><b id="peopleCount">0</b><span>People on the week</span></div>
+      <div class="stat"><b id="weekHours">0</b><span>FOH + kitchen h</span></div>
+      <div class="stat"><b id="weekCost">—</b><span>FOH + kitchen cost</span></div>
+      <div class="stat"><b id="weekWage">—</b><span>Labour %</span></div>
+      <div class="stat"><b id="weekBake">—</b><span>Bakery %</span></div>
+      <div class="stat"><b id="dateRange">2–8 Nov</b><span>Dates</span></div>
+    </div>
+    <div class="sales-card labour-sheet">
+      <h2>Labour this week</h2>
+      <div class="labour-rates">
+        <label>FOH kr/h <input id="fohAvg" type="number" min="0" step="0.5" value="153" /></label>
+        <label>Kitchen kr/h <input id="kitchenAvg" type="number" min="0" step="0.5" value="153" /></label>
+        <label>Bakery kr/h <input id="bakeryAvg" type="number" min="0" step="0.5" value="0" /></label>
+        <label>Target FOH % <input id="targetFohPct" type="number" min="0" max="100" step="0.5" value="21" /></label>
+      </div>
+      <p class="sales-legend">Labour is FOH + kitchen (including prep). kr/h on each person is pay: 140 under 20, 153 from 20, Teo and Mika 165, James 160. Cost and labour % add 12% holiday pay and 31.42% employer socials. Bakers and Graeme are salary, so they sit outside FOH cost until a kr/h is typed. Last year is the same weekday of the same week. Target FOH hours = target sales × 21% ÷ loaded FOH kr/h.</p>
+      <table id="labourTable"></table>
+    </div>
+    <div class="hint" id="hint">Pick a named shift, then trim the start and end if you need labour % down.</div>
+    <div class="board" id="board"></div>
+  </main>
+  <main id="salesMain">
+    <div class="toolbar">
+      <div class="pills" id="salesShops">
+        <button class="pill active" data-shop="both">Both shops</button>
+        <button class="pill" data-shop="ostermalm">Östermalm</button>
+        <button class="pill" data-shop="vasastan">St Eriksgatan</button>
+      </div>
+      <div class="pills" id="salesVat">
+        <button class="pill active" data-vat="excl">Excl. VAT</button>
+        <button class="pill" data-vat="incl">Incl. VAT</button>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="salesYtd">—</b><span id="salesYtdLabel">2026 to 31 Oct, excl. VAT</span></div>
+      <div class="stat"><b id="salesYtdPct">—</b><span id="salesLastYtd">vs last year to 31 Oct</span></div>
+      <div class="stat"><b id="salesTargetKr">—</b><span>Full-year target</span></div>
+      <div class="stat"><b id="salesNeed">—</b><span>Still needed Nov–Dec</span></div>
+      <div class="stat"><b id="salesPace">—</b><span>Per remaining day</span></div>
+      <div class="stat"><b id="salesWageYtd">—</b><span>Wage % on months with a cost</span></div>
+    </div>
+    <div class="stats" id="salesYearStats"></div>
+    <div class="hint" id="salesHint">Your numbers live in this app. Toggle excl. or incl. VAT at the top. 2023–2025 are Baemingo Z-reports. St Eriksgatan in 2023 is Lilla/Torsgatan until St Erik opened in December. 2026 is Baemingo to 14 Oct, then Caspeco 15–31 Oct. Nov–Dec days are last year × your target.</div>
+    <p class="hint" id="salesRestHint"></p>
+    <div class="sales-grid">
+      <div class="sales-card">
+        <h2>Each month vs last year</h2>
+        <div id="salesBars"></div>
+        <table id="salesMonthTable"></table>
+      </div>
+      <div class="sales-card sales-days">
+        <h2>Remaining days</h2>
+        <p class="sales-legend">Same calendar date each year. The weekday under each figure is that year’s actual day — 1 Nov 2025 was a Saturday, 24 Dec was closed.</p>
+        <table id="salesDaysTable"></table>
+      </div>
+    </div>
+    <div class="sales-card sales-wage">
+      <h2>Wage %</h2>
+      <p class="sales-legend" id="salesWageHint">Month actuals from the books ÷ sales excl. VAT. The week labour sheet on Schema is FOH + kitchen, bakery on its own, as in the December sheet.</p>
+      <div class="stats" id="salesWageStats"></div>
+      <table id="salesWageTable"></table>
+    </div>
+  </main>
+  <aside class="send-panel" id="sendPanel" aria-live="polite">
+    <button class="send-close" id="closeSend" aria-label="Close">×</button>
+    <h2 id="sendTitle">Queued for Caspeco</h2>
+    <p id="sendBody"></p>
+    <a class="bookmark" id="bookmarklet" href="#">Send queued week</a>
+    <p>This app does not change Caspeco by itself. Drag that button onto your bookmarks bar, and only click it when the week is finished. Drafts stay unpublished. Other managers can copy this folder and run <code>python3 server.py</code> on their Mac.</p>
+  </aside>
+  <script src="planner.js"></script>
+  <script src="sales.js"></script>
+</body>
+</html>

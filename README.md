@@ -13,10 +13,14 @@ It does **not** change weeks that already have shifts, and it does **not** publi
 ## How it decides
 
 1. Read a JSON snapshot of staff and recent shifts.
-2. Take the **latest complete week** as the coverage template (how many of each grundpass per weekday, with those times).
+2. Take the **latest complete week** as the bakery/kitchen/admin template. Stora FOH uses a fixed daily pattern instead.
 3. Assign **different people** onto that shape.
-4. Eligible people are those who already worked that role, or who belong to the matching staff group (Bageri, FOH, Kitchen, …).
-5. Weekend slots go first to people who have had fewer Saturday/Sunday days in the snapshot history.
+4. Eligible people belong to the matching staff group (Bageri, FOH Full Time, Kitchen, …).
+5. **Stora FOH** is always: 1 AM, 1 PM, 1 Runner AM, 2 PM Runner, 2 PM Runner Close. Sankt Eriksgatan and GAST COVER are skipped.
+6. Five-day FOH (consecutive days off): Buster, Graeme, Maya, Mika, Sophie, Stella, Svea, Thea, Ella Onyango. Graeme is ADMIN / Bordspasset 08:00–16:30, not FOH floor.
+7. Everyone else on FOH is 2–3 shifts. Tilde Gottberg, Katherine, Valentina, and Tom do not work FOH. Viggo works one shift, and only on a green tick.
+8. Red availability crosses are treated as absences. Part-time people (Edwin, Kalle) are only used on green-tick days.
+9. Weekend slots go first to people who have had fewer Saturday/Sunday days in the snapshot history.
 
 ## Usage
 

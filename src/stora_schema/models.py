@@ -58,6 +58,15 @@ class History:
     staff: list[Staff]
     shifts: list[Shift]
     absences: set[tuple[str, date]] = field(default_factory=set)
+    # Part-time people may only be assigned on these dates (green ticks).
+    available_only: dict[str, set[date]] = field(default_factory=dict)
+    admin_primary_ids: set[str] = field(default_factory=set)
+    prefer_five_day_ids: set[str] = field(default_factory=set)
+    extra_roles: list[tuple[str, str, str, str]] = field(default_factory=list)
+    exclude_foh_ids: set[str] = field(default_factory=set)
+    extra_foh_ids: set[str] = field(default_factory=set)
+    max_shifts: dict[str, int] = field(default_factory=dict)
+    inactive_ids: set[str] = field(default_factory=set)
 
     def staff_by_id(self) -> dict[str, Staff]:
         return {person.id: person for person in self.staff}

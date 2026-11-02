@@ -7,6 +7,15 @@ data/snapshots/*
 !data/snapshots/.gitkeep
 data/output/
 .env
+web/pending-send.json
 *.egg-info/
 dist/
 build/
+
+# Private business data (sales, receipts, staff) - kept out of Git
+data/receipts/
+data/sales-raw/
+data/pk_*.json
+web/sales-days.json
+web/employees.json
+web/staff-rates.json
