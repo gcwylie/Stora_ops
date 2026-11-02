@@ -1,0 +1,11 @@
+{
+  "rateVersion": 2,
+  "fohAvg": 153,
+  "kitchenAvg": 153,
+  "bakeryAvg": 0,
+  "targetFohPct": 21,
+  "semesterPct": 12,
+  "agaPct": 31.42,
+  "hourly": { "Sam Ek": 165 },
+  "salary": ["Nora Lind", "Graeme"]
+}

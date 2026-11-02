@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: stora
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-stora}
+      POSTGRES_DB: stora
+    ports:
+      - "5432:5432"
+    volumes:
+      - stora-pg:/var/lib/postgresql/data
+
+  app:
+    profiles: ["full"]
+    build: ./ops
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://stora:${POSTGRES_PASSWORD:-stora}@db:5432/stora
+      AUTH_SECRET: ${AUTH_SECRET:?set AUTH_SECRET}
+      SEED_DEMO: ${SEED_DEMO:-0}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-graeme@stora.local}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?set ADMIN_PASSWORD}
+      ADMIN_NAME: ${ADMIN_NAME:-Graeme}
+      APP_URL: ${APP_URL:-http://localhost:3000}
+      CASPECO_TOKEN: ${CASPECO_TOKEN:-}
+    ports:
+      - "3000:3000"
+
+volumes:
+  stora-pg:
