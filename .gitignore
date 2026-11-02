@@ -19,3 +19,11 @@ data/pk_*.json
 web/sales-days.json
 web/employees.json
 web/staff-rates.json
+
+# Hosted ops app
+ops/node_modules/
+ops/.next/
+ops/.env
+ops/.env.local
+ops/prisma/*.db
+ops/tsconfig.tsbuildinfo

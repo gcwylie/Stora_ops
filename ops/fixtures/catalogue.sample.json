@@ -1,0 +1,40 @@
+{
+  "maxUnits": 100,
+  "valueCap": 20000,
+  "limits": {
+    "2. Dairy & cheese": { "kg": 50, "L": 60, "pcs": 400 },
+    "4. Dry goods & bakery": { "kg": 150, "L": 60, "pcs": 900 }
+  },
+  "items": [
+    {
+      "n": 9001,
+      "c": "2. Dairy & cheese",
+      "i": "Milk 1 L",
+      "s": "Demo Dairy",
+      "u": ["SE88", "SIB2"],
+      "p": "L",
+      "pu": "L",
+      "pv": 1,
+      "pb": "L",
+      "pc": null,
+      "alts": [{ "u": "dl", "f": 0.1 }],
+      "pr": 12,
+      "k": "Demo item. Replace with the real catalogue."
+    },
+    {
+      "n": 9002,
+      "c": "4. Dry goods & bakery",
+      "i": "Wheat flour",
+      "s": "Demo Mill",
+      "u": ["SIB2"],
+      "p": "bag (1 bag = 5 kg)",
+      "pu": "bag",
+      "pv": 5,
+      "pb": "kg",
+      "pc": null,
+      "alts": [{ "u": "kg", "f": 0.2 }],
+      "pr": 85,
+      "k": ""
+    }
+  ]
+}
